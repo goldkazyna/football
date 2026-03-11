@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(php:*)",
+      "Bash(composer create-project:*)",
+      "Bash(cp:*)",
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\":*)",
+      "Bash(composer require:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(curl:*)",
+      "Bash(sed:*)",
+      "Bash(where php:*)",
+      "Bash(xxd:*)",
+      "Bash(find \"C:/projects/football/app/Http/Requests\" -type f -name \"*.php\" 2>/dev/null | head -20)",
+      "Bash(find /c/projects/football/app/Http/Controllers -type f -name \"*.php\" | xargs grep -l \"Tournament\\\\|Match\" | head -20)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
