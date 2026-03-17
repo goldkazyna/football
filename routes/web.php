@@ -18,9 +18,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// --- Legal pages (public) ---
+Route::view('/legal/oferta', 'legal.oferta')->name('legal.oferta');
+Route::view('/legal/opisanie-uslug', 'legal.opisanie-uslug')->name('legal.opisanie-uslug');
+Route::view('/legal/politika-konfidencialnosti', 'legal.politika-konfidencialnosti')->name('legal.politika-konfidencialnosti');
+Route::view('/legal/oplata-i-vozvrat', 'legal.oplata-i-vozvrat')->name('legal.oplata-i-vozvrat');
+
 // --- Auth (guest) ---
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login/check-phone', [LoginController::class, 'checkPhone'])->name('login.checkPhone');
     Route::post('/login/phone', [LoginController::class, 'loginByPhone'])->name('login.phone');
 
     Route::get('/register/{step}', [RegisterController::class, 'showStep'])->name('register.step');

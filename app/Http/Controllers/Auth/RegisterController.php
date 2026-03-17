@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    private array $steps = ['phone', 'profile', 'team', 'verification', 'payment'];
+    private array $steps = ['phone', 'password', 'profile', 'team', 'verification', 'payment'];
 
     public function showStep(string $step)
     {
@@ -59,6 +59,8 @@ class RegisterController extends Controller
         switch ($step) {
             case 'phone':
                 return $this->processPhone($request, $data);
+            case 'password':
+                return $this->processPassword($request, $data);
             case 'profile':
                 return $this->processProfile($request, $data);
             case 'team':
@@ -91,6 +93,22 @@ class RegisterController extends Controller
         }
 
         $data['phone'] = $phone;
+        session(['registration' => $data]);
+
+        return redirect()->route('register.step', 'password');
+    }
+
+    private function processPassword(Request $request, array $data)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'password.required' => 'Введите пароль.',
+            'password.min' => 'Пароль должен содержать минимум 6 символов.',
+            'password.confirmed' => 'Пароли не совпадают.',
+        ]);
+
+        $data['password'] = $request->password;
         session(['registration' => $data]);
 
         return redirect()->route('register.step', 'profile');
@@ -180,6 +198,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'phone' => $data['phone'],
+            'password' => $data['password'] ?? null,
             'city' => $data['city'] ?? null,
             'specialization' => $data['specialization'] ?? null,
             'verification_status' => 'pending',

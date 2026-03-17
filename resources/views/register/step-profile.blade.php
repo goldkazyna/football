@@ -115,6 +115,7 @@
     <!-- Steps -->
     <div class="steps animate-in animate-in-delay-1">
         <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
         <div class="step-dot active"></div>
         <div class="step-dot"></div>
         <div class="step-dot"></div>
@@ -173,7 +174,7 @@
         </div>
 
         <div class="nav-buttons">
-            <a href="{{ route('register.step', 'phone') }}" class="btn-back">
+            <a href="{{ route('register.step', 'password') }}" class="btn-back">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>
@@ -183,6 +184,6 @@
     </form>
 
     <div class="auth-footer animate-in animate-in-delay-4">
-        Шаг 2 из 5
+        Шаг 3 из 6
     </div>
 @endsection

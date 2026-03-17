@@ -59,21 +59,25 @@
 @push('scripts')
 <script>
 document.addEventListener('alpine:init', () => {
-    Alpine.data('phoneMask', (initial) => ({
+    Alpine.data('loginForm', () => ({
         digits: '',
+        password: '',
+        step: 'phone',
+        loading: false,
+        errorMsg: '',
+
         init() {
-            let d = (initial || '').replace(/[^0-9]/g, '');
-            // Strip country code if full number
-            if (d.length === 11 && (d[0] === '7' || d[0] === '8')) d = d.substring(1);
-            this.digits = d.substring(0, 10);
+            let initial = '{{ old("phone", "") }}'.replace(/[^0-9]/g, '');
+            if (initial.length === 11 && (initial[0] === '7' || initial[0] === '8')) initial = initial.substring(1);
+            this.digits = initial.substring(0, 10);
+
+            @if($errors->has('password'))
+                this.step = 'password';
+            @endif
         },
+
         get display() {
-            return this.formatDisplay(this.digits);
-        },
-        get phone() {
-            return '+7' + this.digits;
-        },
-        formatDisplay(d) {
+            let d = this.digits;
             if (d.length === 0) return '';
             let out = '(' + d.substring(0, 3);
             if (d.length >= 3) out += ') ' + d.substring(3, 6);
@@ -81,17 +85,77 @@ document.addEventListener('alpine:init', () => {
             if (d.length >= 8) out += '-' + d.substring(8, 10);
             return out;
         },
+
+        get phone() {
+            return '+7' + this.digits;
+        },
+
+        get phoneComplete() {
+            return this.digits.length === 10;
+        },
+
         onInput(e) {
             let raw = e.target.value.replace(/[^0-9]/g, '');
-            // If pasted full number with country code
             if (raw.length >= 11 && (raw[0] === '7' || raw[0] === '8')) raw = raw.substring(1);
             this.digits = raw.substring(0, 10);
+            if (this.step !== 'phone') {
+                this.step = 'phone';
+                this.password = '';
+                this.errorMsg = '';
+            }
             this.$nextTick(() => { e.target.value = this.display; });
         },
+
         onBackspace(e) {
             if (this.digits.length > 0) {
                 this.digits = this.digits.slice(0, -1);
+                if (this.step !== 'phone') {
+                    this.step = 'phone';
+                    this.password = '';
+                    this.errorMsg = '';
+                }
                 e.target.value = this.display;
+            }
+        },
+
+        async checkPhone() {
+            if (!this.phoneComplete) return;
+
+            this.loading = true;
+            this.errorMsg = '';
+
+            try {
+                const res = await fetch('{{ route("login.checkPhone") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ phone: this.phone })
+                });
+
+                const data = await res.json();
+
+                if (data.status === 'password') {
+                    this.step = 'password';
+                    this.$nextTick(() => this.$refs.passwordInput?.focus());
+                } else if (data.status === 'register' || data.status === 'login') {
+                    this.$refs.form.submit();
+                } else {
+                    this.errorMsg = 'Ваш номер не найден. Обратитесь к администратору.';
+                }
+            } catch (e) {
+                this.errorMsg = 'Ошибка соединения. Попробуйте ещё раз.';
+            }
+
+            this.loading = false;
+        },
+
+        submitForm(e) {
+            if (this.step === 'phone') {
+                e.preventDefault();
+                this.checkPhone();
             }
         }
     }));
@@ -102,14 +166,15 @@ document.addEventListener('alpine:init', () => {
 @section('content')
     <div class="login-header animate-in animate-in-delay-2">
         <h1>Добро пожаловать</h1>
-        <p>Регистрация на футбольный турнир</p>
+        <p>Вход и регистрация на турнир</p>
     </div>
 
-    <form action="{{ route('login.phone') }}" method="POST" class="animate-in animate-in-delay-3">
+    <form x-data="loginForm" x-ref="form" action="{{ route('login.phone') }}" method="POST" @submit="submitForm($event)" class="animate-in animate-in-delay-3">
         @csrf
-        <div class="form-group" x-data="phoneMask('{{ old('phone', '') }}')">
+        <input type="hidden" name="phone" :value="phone">
+
+        <div class="form-group">
             <label class="form-label">Номер телефона</label>
-            <input type="hidden" name="phone" :value="phone">
             <div class="phone-masked-wrapper">
                 <span class="phone-prefix-label">+7</span>
                 <input
@@ -127,25 +192,38 @@ document.addEventListener('alpine:init', () => {
             @error('phone')
                 <div style="color:var(--error);font-size:0.75rem;margin-top:4px;">{{ $message }}</div>
             @enderror
+            <div x-show="errorMsg" x-text="errorMsg" x-cloak style="color:var(--error);font-size:0.75rem;margin-top:4px;"></div>
+        </div>
+
+        <div x-show="step === 'password'" x-transition x-cloak class="form-group">
+            <label class="form-label">Пароль</label>
+            <input
+                type="password"
+                name="password"
+                x-ref="passwordInput"
+                x-model="password"
+                class="form-input @error('password') is-invalid @enderror"
+                placeholder="Введите пароль"
+            >
+            @error('password')
+                <div style="color:var(--error);font-size:0.75rem;margin-top:4px;">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="login-actions">
-            <button type="submit" class="btn btn-primary">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-                </svg>
-                Войти по номеру
-            </button>
-
-            <div class="divider">
-                <span>или войдите через</span>
-            </div>
-
-            <button type="button" class="btn btn-telegram" onclick="alert('Telegram-вход будет доступен позже')">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                </svg>
-                Войти через Telegram
+            <button type="submit" class="btn btn-primary" :disabled="loading || !phoneComplete">
+                <template x-if="loading">
+                    <span>Проверяем...</span>
+                </template>
+                <template x-if="!loading && step === 'phone'">
+                    <span style="display:inline-flex;align-items:center;gap:8px;">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                        Продолжить
+                    </span>
+                </template>
+                <template x-if="!loading && step === 'password'">
+                    <span>Войти</span>
+                </template>
             </button>
         </div>
     </form>
@@ -153,7 +231,10 @@ document.addEventListener('alpine:init', () => {
     <div class="login-footer animate-in animate-in-delay-4">
         <p>
             Продолжая, вы соглашаетесь с<br>
-            <a href="#">Условиями использования</a> и <a href="#">Политикой конфиденциальности</a>
+            <a href="{{ route('legal.oferta') }}">Договором-офертой</a> и <a href="{{ route('legal.politika-konfidencialnosti') }}">Политикой конфиденциальности</a>
+        </p>
+        <p style="margin-top: 6px;">
+            <a href="{{ route('legal.opisanie-uslug') }}">Описание услуг</a> &middot; <a href="{{ route('legal.oplata-i-vozvrat') }}">Оплата и возврат</a>
         </p>
     </div>
 @endsection

@@ -139,6 +139,7 @@ document.addEventListener('alpine:init', () => {
         <div class="step-dot"></div>
         <div class="step-dot"></div>
         <div class="step-dot"></div>
+        <div class="step-dot"></div>
     </div>
 
     <!-- Header -->
@@ -186,6 +187,6 @@ document.addEventListener('alpine:init', () => {
     </form>
 
     <div class="auth-footer animate-in animate-in-delay-4">
-        Шаг 1 из 5
+        Шаг 1 из 6
     </div>
 @endsection

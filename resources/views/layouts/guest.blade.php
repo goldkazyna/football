@@ -7,6 +7,7 @@
     <title>@yield('title', 'Футбольные турниры врачей') — {{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>[x-cloak] { display: none !important; }</style>
     @stack('styles')
 </head>
 <body class="auth-page">
@@ -34,7 +35,7 @@
     </div>
 
     <div class="auth-footer">
-        &copy; {{ date('Y') }} {{ config('app.name') }}. Все права защищены.
+        &copy; {{ date('Y') }} ОО «Казахстанское общество врачей любителей футбола». Все права защищены.
     </div>
 
     @stack('scripts')

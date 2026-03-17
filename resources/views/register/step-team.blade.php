@@ -29,6 +29,7 @@
     <div class="steps animate-in animate-in-delay-1">
         <div class="step-dot done"></div>
         <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
         <div class="step-dot active"></div>
         <div class="step-dot"></div>
         <div class="step-dot"></div>
@@ -115,6 +116,6 @@
     </form>
 
     <div class="auth-footer animate-in animate-in-delay-4">
-        Шаг 3 из 5
+        Шаг 4 из 6
     </div>
 @endsection
