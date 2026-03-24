@@ -53,6 +53,9 @@ class PlexyService
     {
         $secret = config('services.plexy.webhook_secret');
 
-        return $authHeader === "Bearer {$secret}";
+        // Plexy может слать: "Bearer <key>", "<key>", или "Bearer Bearer <key>"
+        return $authHeader === "Bearer {$secret}"
+            || $authHeader === $secret
+            || $authHeader === "Bearer Bearer {$secret}";
     }
 }

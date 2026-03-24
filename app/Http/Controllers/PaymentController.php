@@ -71,11 +71,18 @@ class PaymentController extends Controller
 
     public function callback(Request $request, PlexyService $plexy)
     {
-        // Верифицируем webhook
         $authHeader = $request->header('Authorization', '');
+
+        Log::info('Plexy webhook: auth debug', [
+            'auth_header' => $authHeader,
+            'ip' => $request->ip(),
+        ]);
+
+        // Верифицируем webhook — проверяем Bearer token или raw key
         if (!$plexy->verifyWebhook($authHeader)) {
             Log::warning('Plexy webhook: invalid auth', [
                 'ip' => $request->ip(),
+                'auth_header' => substr($authHeader, 0, 30) . '...',
             ]);
             return response()->json(['error' => 'Unauthorized'], 401);
         }
