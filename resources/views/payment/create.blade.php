@@ -17,6 +17,7 @@
     .payment-detail-row:last-child{border-bottom:none}
     .payment-detail-label{color:var(--text-muted)}
     .payment-detail-value{color:var(--text-primary);font-weight:600}
+    .payment-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:var(--space-sm) var(--space-md);color:var(--error);font-size:0.8125rem;margin-bottom:var(--space-md)}
 </style>
 @endpush
 
@@ -26,30 +27,35 @@
             <div class="payment-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
-            <div class="payment-title">Членский взнос</div>
-            <div class="payment-desc">Оплата членского взноса для участия в лиге</div>
+            <div class="payment-title">Подписка</div>
+            <div class="payment-desc">Ежемесячная подписка для участия в лиге</div>
+
+            @if(session('error'))
+                <div class="payment-error">{{ session('error') }}</div>
+            @endif
 
             <div class="payment-amount">
-                {{ number_format($amount ?? 15000) }} <span>&#8376;</span>
+                {{ number_format($amount, 0, '', ' ') }} <span>&#8376;/мес</span>
             </div>
 
             <div class="payment-details">
                 <div class="payment-detail-row">
                     <span class="payment-detail-label">Плательщик</span>
-                    <span class="payment-detail-value">{{ auth()->user()->name }}</span>
+                    <span class="payment-detail-value">{{ $user->name }}</span>
                 </div>
-                @if(isset($description))
                 <div class="payment-detail-row">
-                    <span class="payment-detail-label">Назначение</span>
-                    <span class="payment-detail-value">{{ $description }}</span>
+                    <span class="payment-detail-label">Период</span>
+                    <span class="payment-detail-value">1 месяц</span>
                 </div>
-                @endif
+                <div class="payment-detail-row">
+                    <span class="payment-detail-label">Способ оплаты</span>
+                    <span class="payment-detail-value">Банковская карта</span>
+                </div>
             </div>
 
-            <form method="POST" action="{{ route('payment.process') }}">
+            <form method="POST" action="{{ route('payment.initiate') }}">
                 @csrf
-                <input type="hidden" name="amount" value="{{ $amount ?? 15000 }}">
-                <button type="submit" class="btn btn-primary">Оплатить</button>
+                <button type="submit" class="btn btn-primary" style="width:100%">Оплатить {{ number_format($amount, 0, '', ' ') }} &#8376;</button>
             </form>
         </div>
     </div>

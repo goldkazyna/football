@@ -11,6 +11,7 @@ class Payment extends Model
         'user_id', 'amount', 'currency', 'status',
         'payment_method', 'transaction_id', 'confirmed_by',
         'valid_from', 'valid_until',
+        'plexy_link_id', 'plexy_checkout_url', 'order_reference',
     ];
 
     protected function casts(): array

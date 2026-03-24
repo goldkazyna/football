@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'plexy' => [
+        'api_key' => env('PLEXY_API_KEY'),
+        'webhook_secret' => env('PLEXY_WEBHOOK_SECRET'),
+        'base_url' => 'https://api.plexypay.com/v1',
+        'membership_fee' => 350000, // 3500 KZT в тиынах
+    ],
+
 ];

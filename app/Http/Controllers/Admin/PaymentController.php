@@ -34,12 +34,12 @@ class PaymentController extends Controller
             'status' => 'confirmed',
             'confirmed_by' => $request->user()->id,
             'valid_from' => now(),
-            'valid_until' => now()->addYear(),
+            'valid_until' => now()->addMonth(),
         ]);
 
         $payment->user->update([
             'subscription_status' => 'active',
-            'subscription_expires_at' => now()->addYear(),
+            'subscription_expires_at' => now()->addMonth(),
         ]);
 
         return back()->with('success', "Оплата для {$payment->user->name} подтверждена.");
