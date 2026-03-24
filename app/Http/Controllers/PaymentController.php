@@ -150,7 +150,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function success(Request $request)
+    public function success(Request $request, PlexyService $plexy)
     {
         $orderReference = $request->query('order');
         $payment = null;
@@ -159,6 +159,15 @@ class PaymentController extends Controller
             $payment = Payment::where('order_reference', $orderReference)
                 ->where('user_id', $request->user()->id)
                 ->first();
+
+            // Подстраховка: если webhook не дошёл, проверяем статус через API
+            if ($payment && $payment->status === 'pending' && $payment->plexy_link_id) {
+                $linkData = $plexy->getPaymentLink($payment->plexy_link_id);
+
+                if ($linkData && in_array($linkData['status'] ?? '', ['charged', 'authorized', 'completed', 'paid'])) {
+                    $this->handlePaymentSuccess($payment, $linkData);
+                }
+            }
         }
 
         return view('payment.success', compact('payment'));
