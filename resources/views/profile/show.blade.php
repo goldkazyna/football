@@ -86,7 +86,11 @@
         @else
             <div class="sub-detail">Нет активной подписки</div>
         @endif
-        <button class="btn btn-secondary" style="height:44px;font-size:0.875rem">Оплатить взнос</button>
+        @if($user->isActive())
+            <a href="{{ route('payment.create') }}" class="btn btn-secondary" style="height:44px;font-size:0.875rem;text-decoration:none">Продлить подписку</a>
+        @else
+            <a href="{{ route('payment.create') }}" class="btn btn-primary" style="height:44px;font-size:0.875rem;text-decoration:none">Оплатить взнос</a>
+        @endif
     </div>
 
     {{-- Actions --}}
