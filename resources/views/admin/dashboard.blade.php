@@ -15,23 +15,32 @@
     .stat-label{font-size:0.6875rem;color:var(--text-secondary);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .section-title{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:var(--space-md)}
     .section-block{margin-bottom:var(--space-lg)}
-    .request-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-sm)}
-    .request-header{display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-sm)}
-    .request-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#16a34a);display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;color:#fff;flex-shrink:0}
-    .request-info{flex:1;min-width:0}
-    .request-name{font-size:0.8125rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ver-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-md)}
+    .ver-card-top{padding:var(--space-md) var(--space-md) 0}
+    .ver-card-user{display:flex;align-items:center;gap:var(--space-sm)}
+    .ver-card-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:700;color:#fff;flex-shrink:0}
+    .ver-card-info{flex:1;min-width:0}
+    .ver-card-name{font-size:0.9375rem;font-weight:700;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ver-card-iin{font-size:0.75rem;color:var(--text-muted);font-variant-numeric:tabular-nums;margin-top:1px}
+    .ver-card-date{font-size:0.6875rem;color:var(--text-muted);flex-shrink:0;align-self:flex-start;margin-top:2px}
+    .ver-card-tags{display:flex;flex-wrap:wrap;gap:6px;padding:var(--space-sm) var(--space-md)}
+    .ver-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-full);font-size:0.6875rem;font-weight:600;background:var(--bg-input);color:var(--text-secondary)}
+    .ver-tag svg{width:12px;height:12px}
+    .ver-tag.role-captain{background:rgba(245,158,11,0.1);color:var(--warning)}
+    .ver-tag.role-player{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
+    .ver-card-docs{display:flex;gap:var(--space-sm);padding:0 var(--space-md) var(--space-md)}
+    .ver-doc-link{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:var(--radius-sm);font-size:0.6875rem;font-weight:500;color:var(--text-secondary);text-decoration:none;transition:all var(--transition-fast);flex:1;min-width:0}
+    .ver-doc-link:hover{border-color:var(--accent-blue);color:var(--accent-blue);background:rgba(59,130,246,0.04)}
+    .ver-doc-link svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-blue)}
+    .ver-doc-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ver-card-actions{display:flex;border-top:1px solid var(--border-subtle)}
+    .ver-btn{flex:1;height:44px;border:none;font-size:0.8125rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast);background:transparent}
+    .ver-btn-approve{color:var(--primary)}
+    .ver-btn-approve:hover{background:rgba(34,197,94,0.06)}
+    .ver-btn-reject{color:var(--text-muted);border-left:1px solid var(--border-subtle)}
+    .ver-btn-reject:hover{color:var(--error);background:rgba(239,68,68,0.04)}
+    .request-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;color:#fff;flex-shrink:0}
     .request-meta{font-size:0.6875rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .request-date{font-size:0.6875rem;color:var(--text-muted);flex-shrink:0}
-    .request-details{display:flex;flex-wrap:wrap;gap:6px;margin:var(--space-sm) 0}
-    .request-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:var(--radius-full);font-size:0.6875rem;font-weight:600;background:var(--bg-input);color:var(--text-secondary)}
-    .request-tag.role-captain{background:rgba(245,158,11,0.12);color:var(--warning)}
-    .request-tag.role-player{background:rgba(59,130,246,0.12);color:var(--accent-blue)}
-    .request-tag svg{width:12px;height:12px}
-    .request-actions{display:flex;gap:var(--space-sm);margin-top:var(--space-sm)}
-    .btn-approve{flex:1;height:34px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:0.75rem;font-weight:600;font-family:inherit;cursor:pointer;transition:background var(--transition-fast)}
-    .btn-approve:hover{background:var(--primary-hover)}
-    .btn-reject{flex:1;height:34px;background:transparent;color:var(--error);border:1px solid var(--error);border-radius:var(--radius-sm);font-size:0.75rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast)}
-    .btn-reject:hover{background:rgba(239,68,68,0.1)}
     .team-request-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-sm);display:flex;align-items:center;gap:var(--space-sm)}
     .team-request-text{flex:1;min-width:0}
     .team-request-flow{font-size:0.8125rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -96,66 +105,66 @@
         <div class="section-title">Заявки на верификацию</div>
 
         @forelse($pendingVerifications as $verification)
-            <div class="request-card">
-                <div class="request-header">
-                    <div class="request-avatar">{{ mb_substr($verification->name, 0, 2) }}</div>
-                    <div class="request-info">
-                        <div class="request-name">{{ $verification->name }}</div>
-                        <div class="request-meta">{{ $verification->iin }}</div>
+            @php $verTeam = $verification->currentTeam(); @endphp
+            <div class="ver-card">
+                <div class="ver-card-top">
+                    <div class="ver-card-user">
+                        <div class="ver-card-avatar" style="background:linear-gradient(135deg,{{ $verification->role === 'captain' ? 'var(--warning),#d97706' : 'var(--accent-blue),#6366f1' }})">{{ mb_substr($verification->name, 0, 2) }}</div>
+                        <div class="ver-card-info">
+                            <div class="ver-card-name">{{ $verification->name }}</div>
+                            <div class="ver-card-iin">{{ $verification->iin }}</div>
+                        </div>
+                        <div class="ver-card-date">{{ $verification->created_at->format('d.m.Y') }}</div>
                     </div>
-                    <div class="request-date">{{ $verification->created_at->format('d.m') }}</div>
                 </div>
-                <div class="request-details">
-                    <span class="request-tag {{ $verification->role === 'captain' ? 'role-captain' : 'role-player' }}">
-                        {{ $verification->role === 'captain' ? 'Капитан' : ($verification->role === 'superadmin' ? 'Админ' : 'Игрок') }}
+                <div class="ver-card-tags">
+                    <span class="ver-tag {{ $verification->role === 'captain' ? 'role-captain' : 'role-player' }}">
+                        {{ $verification->role === 'captain' ? 'Капитан' : 'Игрок' }}
                     </span>
                     @if($verification->specialization)
-                        <span class="request-tag">
+                        <span class="ver-tag">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                             {{ $verification->specialization }}
                         </span>
                     @endif
                     @if($verification->city)
-                        <span class="request-tag">
+                        <span class="ver-tag">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             {{ $verification->city }}
                         </span>
                     @endif
-                    @php
-                        $verTeam = $verification->currentTeam();
-                    @endphp
                     @if($verTeam)
-                        <span class="request-tag">
+                        <span class="ver-tag">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/></svg>
                             {{ $verTeam->name }}
                         </span>
                     @endif
                 </div>
                 @if($verification->doc_diploma || $verification->doc_id || $verification->doc_pension)
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--space-sm);">
+                    <div class="ver-card-docs">
                         @foreach([['doc_diploma', 'Диплом'], ['doc_id', 'Удостоверение'], ['doc_pension', 'Выписка ПФ']] as [$field, $label])
                             @if($verification->$field)
-                                <a href="{{ Storage::url($verification->$field) }}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-size:0.6875rem;color:var(--accent-blue);text-decoration:none;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                    {{ $label }}
+                                <a href="{{ Storage::url($verification->$field) }}" target="_blank" class="ver-doc-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    <span>{{ $label }}</span>
                                 </a>
                             @endif
                         @endforeach
                     </div>
                 @endif
-                <div class="request-actions">
+                <div class="ver-card-actions">
                     <form method="POST" action="{{ route('admin.users.verify', $verification) }}" style="flex:1">
                         @csrf
-                        <button type="submit" class="btn-approve" style="width:100%">Одобрить</button>
+                        <button type="submit" class="ver-btn ver-btn-approve">Одобрить</button>
                     </form>
                     <form method="POST" action="{{ route('admin.users.reject', $verification) }}" style="flex:1">
                         @csrf
-                        <button type="submit" class="btn-reject" style="width:100%">Отклонить</button>
+                        <button type="submit" class="ver-btn ver-btn-reject">Отклонить</button>
                     </form>
                 </div>
             </div>
         @empty
-            <div style="padding:var(--space-md);text-align:center;color:var(--text-muted);font-size:0.8125rem;">
+            <div style="padding:var(--space-lg);text-align:center;color:var(--text-muted);font-size:0.8125rem;">
                 Нет заявок на верификацию
             </div>
         @endforelse
