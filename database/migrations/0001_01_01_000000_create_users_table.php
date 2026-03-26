@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->enum('role', ['superadmin', 'tournament_admin', 'captain', 'player'])->default('player');
             $table->enum('verification_status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->string('verification_document')->nullable();
+            $table->string('doc_diploma')->nullable();
+            $table->string('doc_id')->nullable();
+            $table->string('doc_pension')->nullable();
             $table->enum('subscription_status', ['active', 'inactive'])->default('inactive');
             $table->timestamp('subscription_expires_at')->nullable();
             $table->boolean('is_blocked')->default(false);

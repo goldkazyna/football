@@ -171,16 +171,24 @@ class RegisterController extends Controller
     private function processVerification(Request $request, array $data)
     {
         $request->validate([
-            'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_diploma' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_id' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_pension' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
-            'document.required' => 'Загрузите документ для верификации.',
-            'document.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
-            'document.max' => 'Максимальный размер файла — 10 МБ.',
-            'document.uploaded' => 'Файл слишком большой. Максимум 10 МБ.',
+            'doc_diploma.required' => 'Загрузите копию диплома.',
+            'doc_diploma.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_diploma.max' => 'Максимальный размер файла — 10 МБ.',
+            'doc_id.required' => 'Загрузите удостоверение личности.',
+            'doc_id.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_id.max' => 'Максимальный размер файла — 10 МБ.',
+            'doc_pension.required' => 'Загрузите выписку из пенсионного фонда.',
+            'doc_pension.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_pension.max' => 'Максимальный размер файла — 10 МБ.',
         ]);
 
-        $path = $request->file('document')->store('verification_documents', 'public');
-        $data['verification_document'] = $path;
+        $data['doc_diploma'] = $request->file('doc_diploma')->store('verification_documents', 'public');
+        $data['doc_id'] = $request->file('doc_id')->store('verification_documents', 'public');
+        $data['doc_pension'] = $request->file('doc_pension')->store('verification_documents', 'public');
         session(['registration' => $data]);
 
         return redirect()->route('register.step', 'payment');
@@ -206,7 +214,9 @@ class RegisterController extends Controller
             'city' => $data['city'] ?? null,
             'specialization' => $data['specialization'] ?? null,
             'verification_status' => 'pending',
-            'verification_document' => $data['verification_document'] ?? null,
+            'doc_diploma' => $data['doc_diploma'] ?? null,
+            'doc_id' => $data['doc_id'] ?? null,
+            'doc_pension' => $data['doc_pension'] ?? null,
             'role' => $role,
         ]);
 

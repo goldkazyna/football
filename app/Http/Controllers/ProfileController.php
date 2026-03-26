@@ -48,22 +48,31 @@ class ProfileController extends Controller
     public function reuploadDocument(Request $request)
     {
         $request->validate([
-            'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_diploma' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_id' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'doc_pension' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
-            'document.required' => 'Загрузите документ.',
-            'document.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
-            'document.max' => 'Максимальный размер — 10 МБ.',
+            'doc_diploma.required' => 'Загрузите копию диплома.',
+            'doc_diploma.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_diploma.max' => 'Максимальный размер — 10 МБ.',
+            'doc_id.required' => 'Загрузите удостоверение личности.',
+            'doc_id.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_id.max' => 'Максимальный размер — 10 МБ.',
+            'doc_pension.required' => 'Загрузите выписку из пенсионного фонда.',
+            'doc_pension.mimes' => 'Допустимые форматы: JPG, PNG, PDF.',
+            'doc_pension.max' => 'Максимальный размер — 10 МБ.',
         ]);
 
         $user = $request->user();
-        $path = $request->file('document')->store('verification_documents', 'public');
 
         $user->update([
-            'verification_document' => $path,
+            'doc_diploma' => $request->file('doc_diploma')->store('verification_documents', 'public'),
+            'doc_id' => $request->file('doc_id')->store('verification_documents', 'public'),
+            'doc_pension' => $request->file('doc_pension')->store('verification_documents', 'public'),
             'verification_status' => 'pending',
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Документ отправлен на повторную проверку.');
+        return redirect()->route('dashboard')->with('success', 'Документы отправлены на повторную проверку.');
     }
 
     public function payments(Request $request)

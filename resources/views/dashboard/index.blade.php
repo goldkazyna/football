@@ -73,11 +73,21 @@
                 <div class="status-banner-text">Ваши документы не прошли проверку. Пожалуйста, загрузите корректные документы повторно.</div>
                 <form method="POST" action="{{ route('profile.reupload') }}" enctype="multipart/form-data" style="margin-top:var(--space-sm);">
                     @csrf
-                    <label class="btn-sm-reupload" style="position:relative;overflow:hidden;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        Загрузить документ заново
-                        <input type="file" name="document" accept=".jpg,.jpeg,.png,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="this.form.submit()">
-                    </label>
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">
+                        <label class="btn-sm-reupload" style="position:relative;overflow:hidden;">
+                            Диплом
+                            <input type="file" name="doc_diploma" accept=".jpg,.jpeg,.png,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                        </label>
+                        <label class="btn-sm-reupload" style="position:relative;overflow:hidden;">
+                            Удостоверение
+                            <input type="file" name="doc_id" accept=".jpg,.jpeg,.png,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                        </label>
+                        <label class="btn-sm-reupload" style="position:relative;overflow:hidden;">
+                            Выписка ПФ
+                            <input type="file" name="doc_pension" accept=".jpg,.jpeg,.png,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-sm-reupload">Отправить заново</button>
                 </form>
             </div>
         </div>

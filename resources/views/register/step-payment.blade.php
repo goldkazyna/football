@@ -213,8 +213,8 @@
             </span>
         </div>
         <div class="payment-detail">
-            <span class="payment-detail-label">Документ</span>
-            <span class="payment-detail-value">Загружен</span>
+            <span class="payment-detail-label">Документы</span>
+            <span class="payment-detail-value">3 загружено</span>
         </div>
     </div>
 

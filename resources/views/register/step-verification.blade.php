@@ -32,7 +32,7 @@
 
     .register-header {
         text-align: center;
-        margin-bottom: var(--space-xl);
+        margin-bottom: var(--space-lg);
     }
 
     .register-header h1 {
@@ -49,116 +49,116 @@
         line-height: 1.5;
     }
 
-    .info-box {
+    .doc-list {
         display: flex;
+        flex-direction: column;
         gap: var(--space-md);
-        padding: var(--space-md);
-        background: rgba(59, 130, 246, 0.06);
-        border: 1px solid rgba(59, 130, 246, 0.12);
-        border-radius: var(--radius-md);
-        margin-bottom: var(--space-xl);
-    }
-
-    .info-box svg {
-        width: 20px;
-        height: 20px;
-        color: var(--accent-blue);
-        flex-shrink: 0;
-        margin-top: 1px;
-    }
-
-    .info-box p {
-        font-size: 0.8125rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
-    }
-
-    .upload-zone {
-        border: 2px dashed var(--border-input);
-        border-radius: var(--radius-lg);
-        padding: var(--space-2xl) var(--space-lg);
-        text-align: center;
-        cursor: pointer;
-        transition: all var(--transition-base);
         margin-bottom: var(--space-lg);
+    }
+
+    .doc-item {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: var(--space-md);
         position: relative;
     }
 
-    .upload-zone:hover {
-        border-color: var(--accent-blue);
-        background: rgba(59, 130, 246, 0.03);
-    }
-
-    .upload-zone.has-file {
+    .doc-item.has-file {
         border-color: var(--primary);
-        border-style: solid;
-        background: rgba(34, 197, 94, 0.04);
     }
 
-    .upload-icon {
-        width: 48px;
-        height: 48px;
+    .doc-item-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-sm);
+    }
+
+    .doc-item-num {
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         background: var(--bg-input);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto var(--space-md);
-    }
-
-    .upload-icon svg {
-        width: 24px;
-        height: 24px;
+        font-size: 0.6875rem;
+        font-weight: 700;
         color: var(--text-muted);
+        flex-shrink: 0;
     }
 
-    .upload-zone.has-file .upload-icon svg {
+    .doc-item.has-file .doc-item-num {
+        background: rgba(34, 197, 94, 0.12);
         color: var(--primary);
     }
 
-    .upload-zone h3 {
-        font-size: 0.9375rem;
+    .doc-item-title {
+        font-size: 0.8125rem;
         font-weight: 600;
         color: var(--text-primary);
-        margin-bottom: 4px;
     }
 
-    .upload-zone p {
-        font-size: 0.75rem;
+    .doc-upload-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 40px;
+        border: 1px dashed var(--border-input);
+        border-radius: var(--radius-sm);
+        background: transparent;
         color: var(--text-muted);
+        font-size: 0.75rem;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        position: relative;
+        overflow: hidden;
     }
 
-    .upload-zone input[type="file"] {
+    .doc-upload-btn:hover {
+        border-color: var(--accent-blue);
+        color: var(--accent-blue);
+    }
+
+    .doc-upload-btn input[type="file"] {
         position: absolute;
         inset: 0;
         opacity: 0;
         cursor: pointer;
     }
 
-    .file-name {
-        display: none;
-        align-items: center;
-        gap: var(--space-sm);
-        padding: 10px var(--space-md);
-        background: var(--bg-input);
-        border-radius: var(--radius-sm);
-        margin-bottom: var(--space-lg);
-        font-size: 0.8125rem;
-        color: var(--text-secondary);
+    .doc-upload-btn svg {
+        width: 16px;
+        height: 16px;
     }
 
-    .file-name.show {
+    .doc-file-info {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: rgba(34, 197, 94, 0.06);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        color: var(--primary);
+        font-weight: 500;
+    }
+
+    .doc-file-info.show {
         display: flex;
     }
 
-    .file-name svg {
-        width: 16px;
-        height: 16px;
-        color: var(--primary);
+    .doc-file-info svg {
+        width: 14px;
+        height: 14px;
         flex-shrink: 0;
     }
 
-    .file-name span {
+    .doc-file-info span {
         flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -194,6 +194,13 @@
         width: 20px;
         height: 20px;
     }
+
+    .doc-hint {
+        font-size: 0.6875rem;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: var(--space-lg);
+    }
 </style>
 @endpush
 
@@ -211,47 +218,76 @@
     <!-- Header -->
     <div class="register-header animate-in animate-in-delay-1">
         <h1>Верификация врача</h1>
-        <p>Подтвердите, что вы являетесь медицинским специалистом</p>
-    </div>
-
-    <!-- Info -->
-    <div class="info-box animate-in animate-in-delay-2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="16" x2="12" y2="12"/>
-            <line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        <p>Загрузите скан или фото вашего диплома врача или действующего сертификата специалиста. Допустимые форматы: JPG, JPEG, PNG, PDF. Максимальный размер: 2 МБ.</p>
+        <p>Загрузите 3 документа для подтверждения</p>
     </div>
 
     <!-- Upload form -->
-    <form class="animate-in animate-in-delay-3" method="POST" action="{{ route('register.process', 'verification') }}" enctype="multipart/form-data">
+    <form class="animate-in animate-in-delay-2" method="POST" action="{{ route('register.process', 'verification') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="upload-zone" id="uploadZone">
-            <div class="upload-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                </svg>
+        <div class="doc-list">
+            <!-- 1. Диплом -->
+            <div class="doc-item" id="docItem1">
+                <div class="doc-item-header">
+                    <div class="doc-item-num">1</div>
+                    <div class="doc-item-title">Копия диплома</div>
+                </div>
+                <div class="doc-upload-btn" id="uploadBtn1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Выбрать файл</span>
+                    <input type="file" name="doc_diploma" accept=".jpg,.jpeg,.png,.pdf" onchange="handleFile(this, 1)">
+                </div>
+                <div class="doc-file-info" id="fileInfo1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span id="fileName1"></span>
+                </div>
+                @error('doc_diploma')
+                    <div style="color:var(--error);font-size:0.75rem;margin-top:6px;">{{ $message }}</div>
+                @enderror
             </div>
-            <h3 id="uploadTitle">Загрузите документ</h3>
-            <p id="uploadHint">Нажмите или перетащите файл сюда<br>JPG, JPEG, PNG, PDF &mdash; до 10 МБ</p>
-            <input type="file" name="document" id="docFile" accept=".jpg,.jpeg,.png,.pdf">
+
+            <!-- 2. Удостоверение личности -->
+            <div class="doc-item" id="docItem2">
+                <div class="doc-item-header">
+                    <div class="doc-item-num">2</div>
+                    <div class="doc-item-title">Удостоверение личности</div>
+                </div>
+                <div class="doc-upload-btn" id="uploadBtn2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Выбрать файл</span>
+                    <input type="file" name="doc_id" accept=".jpg,.jpeg,.png,.pdf" onchange="handleFile(this, 2)">
+                </div>
+                <div class="doc-file-info" id="fileInfo2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span id="fileName2"></span>
+                </div>
+                @error('doc_id')
+                    <div style="color:var(--error);font-size:0.75rem;margin-top:6px;">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- 3. Выписка из ПФ -->
+            <div class="doc-item" id="docItem3">
+                <div class="doc-item-header">
+                    <div class="doc-item-num">3</div>
+                    <div class="doc-item-title">Выписка из пенсионного фонда</div>
+                </div>
+                <div class="doc-upload-btn" id="uploadBtn3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>Выбрать файл</span>
+                    <input type="file" name="doc_pension" accept=".jpg,.jpeg,.png,.pdf" onchange="handleFile(this, 3)">
+                </div>
+                <div class="doc-file-info" id="fileInfo3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span id="fileName3"></span>
+                </div>
+                @error('doc_pension')
+                    <div style="color:var(--error);font-size:0.75rem;margin-top:6px;">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
 
-        @error('document')
-            <div class="form-error" style="margin-bottom: var(--space-md);">{{ $message }}</div>
-        @enderror
-
-        <div class="file-name" id="fileName">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <span id="fileNameText"></span>
-        </div>
+        <div class="doc-hint">JPG, PNG, PDF — до 10 МБ каждый</div>
 
         <div class="nav-buttons">
             <a href="{{ route('register.step', 'team') }}" class="btn-back">
@@ -270,29 +306,14 @@
 
 @push('scripts')
 <script>
-    const fileInput = document.getElementById('docFile');
-    const uploadZone = document.getElementById('uploadZone');
-
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    function handleFile(input, num) {
+        const file = input.files[0];
         if (file) {
-            uploadZone.classList.add('has-file');
-            document.getElementById('uploadTitle').textContent = 'Файл выбран';
-            document.getElementById('uploadHint').textContent = 'Нажмите, чтобы заменить';
-            document.getElementById('fileName').classList.add('show');
-            document.getElementById('fileNameText').textContent = file.name;
+            document.getElementById('docItem' + num).classList.add('has-file');
+            document.getElementById('uploadBtn' + num).style.display = 'none';
+            document.getElementById('fileInfo' + num).classList.add('show');
+            document.getElementById('fileName' + num).textContent = file.name;
         }
-    });
-
-    uploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadZone.style.borderColor = 'var(--accent-blue)';
-        uploadZone.style.background = 'rgba(59,130,246,0.06)';
-    });
-
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.style.borderColor = '';
-        uploadZone.style.background = '';
-    });
+    }
 </script>
 @endpush

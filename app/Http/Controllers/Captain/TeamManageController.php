@@ -34,7 +34,7 @@ class TeamManageController extends Controller
         $pendingVerifications = User::whereIn('id', $memberUserIds)
             ->where('id', '!=', $request->user()->id)
             ->where('verification_status', 'pending')
-            ->whereNotNull('verification_document')
+            ->whereNotNull('doc_diploma')
             ->get();
 
         return view('my-team.manage', compact('team', 'applications', 'members', 'pendingVerifications'));

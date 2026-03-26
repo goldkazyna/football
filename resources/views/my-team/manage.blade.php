@@ -114,11 +114,17 @@
                         </span>
                     @endif
                 </div>
-                @if($verification->verification_document)
-                    <a href="{{ Storage::url($verification->verification_document) }}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-size:0.6875rem;color:var(--accent-blue);text-decoration:none;margin-bottom:var(--space-sm);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        Посмотреть документ
-                    </a>
+                @if($verification->doc_diploma || $verification->doc_id || $verification->doc_pension)
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--space-sm);">
+                        @foreach([['doc_diploma', 'Диплом'], ['doc_id', 'Удостоверение'], ['doc_pension', 'Выписка ПФ']] as [$field, $label])
+                            @if($verification->$field)
+                                <a href="{{ Storage::url($verification->$field) }}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;font-size:0.6875rem;color:var(--accent-blue);text-decoration:none;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    {{ $label }}
+                                </a>
+                            @endif
+                        @endforeach
+                    </div>
                 @endif
                 <div class="ver-actions">
                     <form method="POST" action="{{ route('my-team.verify', $verification) }}">

@@ -87,12 +87,16 @@
             @endif
         </div>
 
-        @if($user->verification_document)
-            <div class="section-label" style="margin-top:var(--space-sm);">Загруженный документ</div>
-            <a href="{{ Storage::url($user->verification_document) }}" target="_blank" class="doc-file">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                <span class="doc-file-name">{{ basename($user->verification_document) }}</span>
-            </a>
+        @if($user->doc_diploma || $user->doc_id || $user->doc_pension)
+            <div class="section-label" style="margin-top:var(--space-sm);">Документы</div>
+            @foreach([['doc_diploma', 'Диплом'], ['doc_id', 'Удостоверение'], ['doc_pension', 'Выписка ПФ']] as [$field, $label])
+                @if($user->$field)
+                    <a href="{{ Storage::url($user->$field) }}" target="_blank" class="doc-file">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <span class="doc-file-name">{{ $label }}: {{ basename($user->$field) }}</span>
+                    </a>
+                @endif
+            @endforeach
         @endif
 
         @if($user->verification_status === 'pending')

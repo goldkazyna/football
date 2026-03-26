@@ -22,7 +22,7 @@ class DashboardController extends Controller
         ];
 
         $pendingVerifications = User::where('verification_status', 'pending')
-            ->whereNotNull('verification_document')
+            ->whereNotNull('doc_diploma')
             ->latest()
             ->take(5)
             ->get();
