@@ -33,12 +33,12 @@
     .ver-doc-link:hover{border-color:var(--accent-blue);color:var(--accent-blue);background:rgba(59,130,246,0.04)}
     .ver-doc-link svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-blue)}
     .ver-doc-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .ver-card-actions{display:flex;border-top:1px solid var(--border-subtle)}
-    .ver-btn{flex:1;height:44px;border:none;font-size:0.8125rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast);background:transparent}
-    .ver-btn-approve{color:var(--primary)}
-    .ver-btn-approve:hover{background:rgba(34,197,94,0.06)}
-    .ver-btn-reject{color:var(--text-muted);border-left:1px solid var(--border-subtle)}
-    .ver-btn-reject:hover{color:var(--error);background:rgba(239,68,68,0.04)}
+    .ver-card-actions{display:flex;gap:var(--space-sm);padding:0 var(--space-md) var(--space-md)}
+    .ver-btn{flex:1;height:40px;border:none;border-radius:var(--radius-md);font-size:0.8125rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast)}
+    .ver-btn-approve{background:var(--primary);color:#fff}
+    .ver-btn-approve:hover{background:var(--primary-hover)}
+    .ver-btn-reject{background:transparent;color:var(--text-muted);border:1px solid var(--border-input)}
+    .ver-btn-reject:hover{color:var(--error);border-color:var(--error);background:rgba(239,68,68,0.04)}
     .request-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;color:#fff;flex-shrink:0}
     .request-meta{font-size:0.6875rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .team-request-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-sm);display:flex;align-items:center;gap:var(--space-sm)}
