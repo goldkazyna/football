@@ -15,30 +15,32 @@
     .stat-label{font-size:0.6875rem;color:var(--text-secondary);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .section-title{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:var(--space-md)}
     .section-block{margin-bottom:var(--space-lg)}
-    .ver-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-md)}
-    .ver-card-top{padding:var(--space-md) var(--space-md) 0}
-    .ver-card-user{display:flex;align-items:center;gap:var(--space-sm)}
+
+    .ver-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:var(--space-lg);margin-bottom:var(--space-md)}
+    .ver-card-user{display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-md)}
     .ver-card-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:700;color:#fff;flex-shrink:0}
     .ver-card-info{flex:1;min-width:0}
     .ver-card-name{font-size:0.9375rem;font-weight:700;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .ver-card-iin{font-size:0.75rem;color:var(--text-muted);font-variant-numeric:tabular-nums;margin-top:1px}
     .ver-card-date{font-size:0.6875rem;color:var(--text-muted);flex-shrink:0;align-self:flex-start;margin-top:2px}
-    .ver-card-tags{display:flex;flex-wrap:wrap;gap:6px;padding:var(--space-sm) var(--space-md)}
+    .ver-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--space-md)}
     .ver-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-full);font-size:0.6875rem;font-weight:600;background:var(--bg-input);color:var(--text-secondary)}
     .ver-tag svg{width:12px;height:12px}
     .ver-tag.role-captain{background:rgba(245,158,11,0.1);color:var(--warning)}
     .ver-tag.role-player{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
-    .ver-card-docs{display:flex;gap:var(--space-sm);padding:0 var(--space-md) var(--space-md)}
+    .ver-card-docs{display:flex;gap:var(--space-sm);margin-bottom:var(--space-lg)}
     .ver-doc-link{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-input);border-radius:var(--radius-sm);font-size:0.6875rem;font-weight:500;color:var(--text-secondary);text-decoration:none;transition:all var(--transition-fast);flex:1;min-width:0}
     .ver-doc-link:hover{border-color:var(--accent-blue);color:var(--accent-blue);background:rgba(59,130,246,0.04)}
     .ver-doc-link svg{width:14px;height:14px;flex-shrink:0;color:var(--accent-blue)}
     .ver-doc-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .ver-card-actions{display:flex;gap:var(--space-sm);padding:0 var(--space-md) var(--space-md)}
-    .ver-btn{flex:1;height:40px;border:none;border-radius:var(--radius-md);font-size:0.8125rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast)}
-    .ver-btn-approve{background:var(--primary);color:#fff}
-    .ver-btn-approve:hover{background:var(--primary-hover)}
-    .ver-btn-reject{background:transparent;color:var(--text-muted);border:1px solid var(--border-input)}
-    .ver-btn-reject:hover{color:var(--error);border-color:var(--error);background:rgba(239,68,68,0.04)}
+    .ver-card-actions{display:flex;gap:var(--space-sm)}
+    .ver-card-actions form{flex:1;display:flex}
+    .ver-card-actions .btn{width:100%;height:44px;border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition-fast);border:none;display:flex;align-items:center;justify-content:center}
+    .ver-card-actions .btn-approve{background:var(--primary);color:#fff}
+    .ver-card-actions .btn-approve:hover{background:var(--primary-hover)}
+    .ver-card-actions .btn-reject{background:var(--bg-input);color:var(--text-secondary);border:1px solid var(--border-input)}
+    .ver-card-actions .btn-reject:hover{color:var(--error);border-color:var(--error)}
+
     .request-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;color:#fff;flex-shrink:0}
     .request-meta{font-size:0.6875rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .team-request-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-sm);display:flex;align-items:center;gap:var(--space-sm)}
@@ -107,15 +109,13 @@
         @forelse($pendingVerifications as $verification)
             @php $verTeam = $verification->currentTeam(); @endphp
             <div class="ver-card">
-                <div class="ver-card-top">
-                    <div class="ver-card-user">
-                        <div class="ver-card-avatar" style="background:linear-gradient(135deg,{{ $verification->role === 'captain' ? 'var(--warning),#d97706' : 'var(--accent-blue),#6366f1' }})">{{ mb_substr($verification->name, 0, 2) }}</div>
-                        <div class="ver-card-info">
-                            <div class="ver-card-name">{{ $verification->name }}</div>
-                            <div class="ver-card-iin">{{ $verification->iin }}</div>
-                        </div>
-                        <div class="ver-card-date">{{ $verification->created_at->format('d.m.Y') }}</div>
+                <div class="ver-card-user">
+                    <div class="ver-card-avatar" style="background:linear-gradient(135deg,{{ $verification->role === 'captain' ? 'var(--warning),#d97706' : 'var(--accent-blue),#6366f1' }})">{{ mb_substr($verification->name, 0, 2) }}</div>
+                    <div class="ver-card-info">
+                        <div class="ver-card-name">{{ $verification->name }}</div>
+                        <div class="ver-card-iin">{{ $verification->iin }}</div>
                     </div>
+                    <div class="ver-card-date">{{ $verification->created_at->format('d.m.Y') }}</div>
                 </div>
                 <div class="ver-card-tags">
                     <span class="ver-tag {{ $verification->role === 'captain' ? 'role-captain' : 'role-player' }}">
@@ -153,13 +153,13 @@
                     </div>
                 @endif
                 <div class="ver-card-actions">
-                    <form method="POST" action="{{ route('admin.users.verify', $verification) }}" style="flex:1">
+                    <form method="POST" action="{{ route('admin.users.verify', $verification) }}">
                         @csrf
-                        <button type="submit" class="ver-btn ver-btn-approve">Одобрить</button>
+                        <button type="submit" class="btn btn-approve">Одобрить</button>
                     </form>
-                    <form method="POST" action="{{ route('admin.users.reject', $verification) }}" style="flex:1">
+                    <form method="POST" action="{{ route('admin.users.reject', $verification) }}">
                         @csrf
-                        <button type="submit" class="ver-btn ver-btn-reject">Отклонить</button>
+                        <button type="submit" class="btn btn-reject">Отклонить</button>
                     </form>
                 </div>
             </div>
