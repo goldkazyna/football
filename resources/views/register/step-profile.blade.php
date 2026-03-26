@@ -147,6 +147,20 @@
         </div>
 
         <div class="form-group">
+            <label class="form-label">Номер телефона</label>
+            <input
+                type="tel"
+                name="phone"
+                class="form-input @error('phone') is-invalid @enderror"
+                placeholder="+7 (700) 123-45-67"
+                value="{{ old('phone', $data['phone'] ?? '') }}"
+            >
+            @error('phone')
+                <div class="form-error">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
             <label class="form-label">Специализация / должность</label>
             <input
                 type="text"

@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'iin', 'email', 'password', 'telegram_id', 'avatar',
+        'name', 'iin', 'phone', 'email', 'password', 'telegram_id', 'avatar',
         'role', 'verification_status', 'verification_document',
         'subscription_status', 'subscription_expires_at',
         'is_blocked', 'del', 'city', 'specialization',

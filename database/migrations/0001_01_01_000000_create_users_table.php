@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('iin', 12)->unique();
             $table->boolean('del')->default(false);
+            $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->string('telegram_id')->nullable()->unique();

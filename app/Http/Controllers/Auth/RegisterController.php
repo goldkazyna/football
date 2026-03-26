@@ -119,6 +119,7 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
             'city' => 'required|string|max:255',
             'specialization' => 'required|string|max:255',
         ], [
@@ -128,6 +129,7 @@ class RegisterController extends Controller
         ]);
 
         $data['name'] = $request->name;
+        $data['phone'] = $request->phone;
         $data['city'] = $request->city;
         $data['specialization'] = $request->specialization;
         session(['registration' => $data]);
@@ -199,6 +201,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'iin' => $data['iin'],
+            'phone' => $data['phone'] ?? null,
             'password' => $data['password'] ?? null,
             'city' => $data['city'] ?? null,
             'specialization' => $data['specialization'] ?? null,
