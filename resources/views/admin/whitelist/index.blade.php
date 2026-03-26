@@ -10,7 +10,7 @@
     .count-badge{display:inline-flex;align-items:center;justify-content:center;height:22px;padding:0 8px;border-radius:var(--radius-full);background:rgba(59,130,246,0.12);color:var(--accent-blue);font-size:0.6875rem;font-weight:700;flex-shrink:0}
     .wl-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-sm)}
     .wl-card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-sm);margin-bottom:6px}
-    .wl-phone{font-size:0.875rem;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums}
+    .wl-iin{font-size:0.875rem;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums}
     .wl-delete{width:30px;height:30px;border-radius:50%;background:rgba(239,68,68,0.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background var(--transition-fast)}
     .wl-delete:hover{background:rgba(239,68,68,0.2)}
     .wl-delete svg{width:14px;height:14px;color:var(--error)}
@@ -44,15 +44,15 @@
 
     {{-- Search --}}
     <form method="GET" action="{{ route('whitelist.index') }}" style="margin-bottom:var(--space-md);">
-        <input type="text" name="search" class="form-input" placeholder="Поиск по номеру..." value="{{ request('search') }}" style="width:100%;">
+        <input type="text" name="search" class="form-input" placeholder="Поиск по ИИН..." value="{{ request('search') }}" style="width:100%;">
     </form>
 
-    {{-- Phone List --}}
+    {{-- IIN List --}}
     @forelse($items as $item)
         <div class="wl-card">
             <div class="wl-card-top">
-                <span class="wl-phone">{{ $item->phone }}</span>
-                <form method="POST" action="{{ route('whitelist.destroy', $item) }}" onsubmit="return confirm('Удалить номер из белого списка?')">
+                <span class="wl-iin">{{ $item->iin }}</span>
+                <form method="POST" action="{{ route('whitelist.destroy', $item) }}" onsubmit="return confirm('Удалить ИИН из белого списка?')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="wl-delete">
@@ -66,7 +66,7 @@
                 @endif
                 Добавил: {{ $item->addedByUser->name ?? '—' }} &middot; {{ $item->created_at?->format('d.m.Y') ?? '—' }}
             </div>
-            @if(in_array($item->phone, $registeredPhones))
+            @if(in_array($item->iin, $registeredIins))
                 <div class="wl-registered yes">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     Зарегистрирован
@@ -86,14 +86,14 @@
     {{-- Add Number Modal --}}
     <div class="modal-overlay" id="addModal">
         <div class="modal-content">
-            <div class="modal-title">Добавить номер</div>
+            <div class="modal-title">Добавить ИИН</div>
             <form method="POST" action="{{ route('whitelist.store') }}">
                 @csrf
                 <div class="form-group">
-                    <label class="form-label">Номер телефона</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="+7 7XX XXX-XX-XX" required>
+                    <label class="form-label">ИИН</label>
+                    <input type="text" name="iin" class="form-input" placeholder="Введите 12-значный ИИН" inputmode="numeric" maxlength="12" required>
                 </div>
-                @error('phone')
+                @error('iin')
                     <div style="color:var(--error);font-size:0.75rem;margin-top:var(--space-xs);">{{ $message }}</div>
                 @enderror
                 @if(auth()->user()->isSuperAdmin())

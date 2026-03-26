@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('phone')->unique();
+            $table->string('iin', 12)->unique();
+            $table->boolean('del')->default(false);
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->string('telegram_id')->nullable()->unique();
@@ -27,14 +28,14 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->index('phone');
+            $table->index('iin');
             $table->index('role');
             $table->index('verification_status');
             $table->index('subscription_status');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('phone')->primary();
+            $table->string('iin', 12)->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });

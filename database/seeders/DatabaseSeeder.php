@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         // Superadmin
         $admin = User::create([
             'name' => 'Суперадмин',
-            'phone' => '+77001234567',
+            'iin' => '000000000001',
             'role' => 'superadmin',
             'verification_status' => 'approved',
             'subscription_status' => 'active',
@@ -22,17 +22,17 @@ class DatabaseSeeder extends Seeder
             'specialization' => 'Администратор',
         ]);
 
-        // Add admin phone to whitelist
+        // Add admin iin to whitelist
         Whitelist::create([
-            'phone' => '+77001234567',
+            'iin' => '000000000001',
             'added_by' => $admin->id,
         ]);
 
-        // Add some test phones to whitelist
-        $testPhones = ['+77011111111', '+77022222222', '+77033333333', '+77044444444', '+77055555555'];
-        foreach ($testPhones as $phone) {
+        // Add some test IINs to whitelist
+        $testIins = ['111111111111', '222222222222', '333333333333', '444444444444', '555555555555'];
+        foreach ($testIins as $iin) {
             Whitelist::create([
-                'phone' => $phone,
+                'iin' => $iin,
                 'added_by' => $admin->id,
             ]);
         }

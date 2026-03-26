@@ -48,8 +48,8 @@
     {{-- Info card --}}
     <div class="info-card">
         <div class="info-row">
-            <span class="info-label">Телефон</span>
-            <span class="info-value">{{ $user->phone ?? 'Не указан' }}</span>
+            <span class="info-label">ИИН</span>
+            <span class="info-value">{{ $user->iin ?? 'Не указан' }}</span>
         </div>
         <div class="info-row">
             <span class="info-label">Специализация</span>

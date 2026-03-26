@@ -15,7 +15,7 @@
     .user-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0}
     .user-info{flex:1;min-width:0}
     .user-name{font-size:0.8125rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .user-phone{font-size:0.6875rem;color:var(--text-muted)}
+    .user-iin{font-size:0.6875rem;color:var(--text-muted)}
     .user-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
     .tag{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:var(--radius-full);font-size:0.625rem;font-weight:600}
     .tag-green{background:rgba(34,197,94,0.12);color:var(--primary)}
@@ -36,7 +36,7 @@
 
     <form method="GET" action="{{ route('admin.users.index') }}">
         <div class="search-box">
-            <input type="text" name="search" class="form-input" placeholder="Поиск по имени или телефону..." value="{{ request('search') }}">
+            <input type="text" name="search" class="form-input" placeholder="Поиск по имени или ИИН..." value="{{ request('search') }}">
         </div>
 
         <div class="filters" style="margin-bottom:var(--space-md)">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="user-info">
                     <div class="user-name">{{ $user->name }}</div>
-                    <div class="user-phone">{{ $user->phone }}</div>
+                    <div class="user-iin">{{ $user->iin }}</div>
                 </div>
             </div>
             <div class="user-tags">

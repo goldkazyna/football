@@ -33,9 +33,9 @@ class TeamController extends Controller
 
         // Для каждого проверим, зарегистрирован ли уже
         $captainOptions = $whitelistCaptains->map(function ($wl) {
-            $user = User::where('phone', $wl->phone)->first();
+            $user = User::where('iin', $wl->iin)->where('del', false)->first();
             return (object) [
-                'phone' => $wl->phone,
+                'iin' => $wl->iin,
                 'name' => $user ? $user->name : null,
                 'user_id' => $user?->id,
                 'registered' => (bool) $user,
@@ -51,21 +51,22 @@ class TeamController extends Controller
             'name' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'captain_phone' => 'required|string',
+            'captain_iin' => 'required|string|digits:12',
         ], [
             'name.required' => 'Введите название команды.',
             'city.required' => 'Укажите город.',
-            'captain_phone.required' => 'Выберите капитана.',
+            'captain_iin.required' => 'Выберите капитана.',
+            'captain_iin.digits' => 'ИИН капитана должен содержать 12 цифр.',
         ]);
 
-        $captainPhone = $request->captain_phone;
-        $captain = User::where('phone', $captainPhone)->first();
+        $captainIin = $request->captain_iin;
+        $captain = User::where('iin', $captainIin)->where('del', false)->first();
 
         $team = Team::create([
             'name' => $request->name,
             'city' => $request->city,
             'description' => $request->description,
-            'captain_phone' => $captainPhone,
+            'captain_iin' => $captainIin,
             'captain_id' => $captain?->id,
         ]);
 

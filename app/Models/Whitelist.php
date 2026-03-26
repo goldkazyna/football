@@ -11,7 +11,7 @@ class Whitelist extends Model
 
     protected $table = 'whitelist';
 
-    protected $fillable = ['phone', 'role', 'added_by'];
+    protected $fillable = ['iin', 'role', 'added_by'];
 
     protected function casts(): array
     {
@@ -25,8 +25,8 @@ class Whitelist extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
-    public static function isWhitelisted(string $phone): bool
+    public static function isWhitelisted(string $iin): bool
     {
-        return static::where('phone', $phone)->exists();
+        return static::where('iin', $iin)->exists();
     }
 }

@@ -46,7 +46,7 @@
             <div class="player-avatar">{{ mb_substr($team->captain->name, 0, 2) }}</div>
             <div class="player-info">
                 <div class="player-name">{{ $team->captain->name }}</div>
-                <div class="player-phone">{{ $team->captain->phone }} &middot; Капитан</div>
+                <div class="player-phone">{{ $team->captain->iin }} &middot; Капитан</div>
             </div>
         </div>
     @endif
@@ -61,7 +61,7 @@
                 <div class="player-info">
                     <div class="player-name">{{ $member->user->name }}</div>
                     <div class="player-phone">
-                        {{ $member->user->phone }}
+                        {{ $member->user->iin }}
                         &middot;
                         @if($member->user->subscription_status === 'active' && $member->user->subscription_expires_at?->isFuture())
                             <span style="color:var(--primary);">Оплачен</span>

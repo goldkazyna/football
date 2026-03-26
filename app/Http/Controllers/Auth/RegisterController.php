@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    private array $steps = ['phone', 'password', 'profile', 'team', 'verification', 'payment'];
+    private array $steps = ['iin', 'password', 'profile', 'team', 'verification', 'payment'];
 
     public function showStep(string $step)
     {
@@ -23,16 +23,16 @@ class RegisterController extends Controller
         $data = session('registration', []);
 
         if ($step === 'team') {
-            $phone = $data['phone'] ?? null;
+            $iin = $data['iin'] ?? null;
             $assignedTeam = null;
 
-            if ($phone) {
+            if ($iin) {
                 // Check if admin pre-created a team for this captain
-                $assignedTeam = Team::where('captain_phone', $phone)->first();
+                $assignedTeam = Team::where('captain_iin', $iin)->first();
 
                 // Or if added by a captain — player goes to captain's team
                 if (!$assignedTeam) {
-                    $whitelistEntry = Whitelist::where('phone', $phone)->first();
+                    $whitelistEntry = Whitelist::where('iin', $iin)->first();
                     if ($whitelistEntry && $whitelistEntry->added_by) {
                         $addedBy = User::find($whitelistEntry->added_by);
                         if ($addedBy && $addedBy->role === 'captain') {
@@ -57,8 +57,8 @@ class RegisterController extends Controller
         $data = session('registration', []);
 
         switch ($step) {
-            case 'phone':
-                return $this->processPhone($request, $data);
+            case 'iin':
+                return $this->processIin($request, $data);
             case 'password':
                 return $this->processPassword($request, $data);
             case 'profile':
@@ -74,25 +74,26 @@ class RegisterController extends Controller
         return redirect()->route('register.step', $step);
     }
 
-    private function processPhone(Request $request, array $data)
+    private function processIin(Request $request, array $data)
     {
         $request->validate([
-            'phone' => 'required|string',
+            'iin' => 'required|string|digits:12',
         ], [
-            'phone.required' => 'Введите номер телефона.',
+            'iin.required' => 'Введите ИИН.',
+            'iin.digits' => 'ИИН должен содержать 12 цифр.',
         ]);
 
-        $phone = preg_replace('/[^0-9+]/', '', $request->phone);
+        $iin = $request->iin;
 
-        if (!Whitelist::isWhitelisted($phone)) {
-            return back()->with('error', 'Ваш номер не найден в белом списке. Обратитесь к администратору.');
+        if (!Whitelist::isWhitelisted($iin)) {
+            return back()->with('error', 'Ваш ИИН не найден в белом списке. Обратитесь к администратору.');
         }
 
-        if (User::where('phone', $phone)->exists()) {
-            return redirect()->route('login')->with('error', 'Этот номер уже зарегистрирован. Войдите в систему.');
+        if (User::where('iin', $iin)->where('del', false)->exists()) {
+            return redirect()->route('login')->with('error', 'Этот ИИН уже зарегистрирован. Войдите в систему.');
         }
 
-        $data['phone'] = $phone;
+        $data['iin'] = $iin;
         session(['registration' => $data]);
 
         return redirect()->route('register.step', 'password');
@@ -185,19 +186,19 @@ class RegisterController extends Controller
 
     private function processPayment(Request $request, array $data)
     {
-        if (empty($data['phone']) || empty($data['name'])) {
-            return redirect()->route('register.step', 'phone')
+        if (empty($data['iin']) || empty($data['name'])) {
+            return redirect()->route('register.step', 'iin')
                 ->with('error', 'Пожалуйста, начните регистрацию сначала.');
         }
 
         // Determine role from whitelist
-        $whitelistEntry = Whitelist::where('phone', $data['phone'])->first();
+        $whitelistEntry = Whitelist::where('iin', $data['iin'])->first();
         $role = $whitelistEntry->role ?? 'player';
 
         // Create user
         $user = User::create([
             'name' => $data['name'],
-            'phone' => $data['phone'],
+            'iin' => $data['iin'],
             'password' => $data['password'] ?? null,
             'city' => $data['city'] ?? null,
             'specialization' => $data['specialization'] ?? null,
@@ -207,8 +208,8 @@ class RegisterController extends Controller
         ]);
 
         // Handle team
-        // 1. Check if admin already created a team for this captain (by phone)
-        $preAssignedTeam = Team::where('captain_phone', $data['phone'])->whereNull('captain_id')->first();
+        // 1. Check if admin already created a team for this captain (by iin)
+        $preAssignedTeam = Team::where('captain_iin', $data['iin'])->whereNull('captain_id')->first();
 
         if ($preAssignedTeam) {
             // Admin pre-created team — assign captain
@@ -227,7 +228,7 @@ class RegisterController extends Controller
                 'city' => $data['team_city'] ?? $data['city'],
                 'description' => $data['team_description'] ?? null,
                 'captain_id' => $user->id,
-                'captain_phone' => $user->phone,
+                'captain_iin' => $user->iin,
             ]);
 
             $user->update(['role' => 'captain']);

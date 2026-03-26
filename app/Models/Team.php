@@ -12,7 +12,7 @@ class Team extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'logo', 'city', 'description', 'captain_id', 'captain_phone',
+        'name', 'logo', 'city', 'description', 'captain_id', 'captain_iin',
     ];
 
     public function captain(): BelongsTo

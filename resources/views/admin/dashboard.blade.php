@@ -101,7 +101,7 @@
                     <div class="request-avatar">{{ mb_substr($verification->name, 0, 2) }}</div>
                     <div class="request-info">
                         <div class="request-name">{{ $verification->name }}</div>
-                        <div class="request-meta">{{ $verification->phone }}</div>
+                        <div class="request-meta">{{ $verification->iin }}</div>
                     </div>
                     <div class="request-date">{{ $verification->created_at->format('d.m') }}</div>
                 </div>

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('whitelist', function (Blueprint $table) {
-            $table->enum('role', ['player', 'captain'])->default('player')->after('phone');
+            $table->enum('role', ['player', 'captain'])->default('player')->after('iin');
         });
     }
 

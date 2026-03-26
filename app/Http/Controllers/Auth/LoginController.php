@@ -16,48 +16,50 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function checkPhone(Request $request)
+    public function checkIin(Request $request)
     {
         $request->validate([
-            'phone' => 'required|string',
+            'iin' => 'required|string|digits:12',
         ], [
-            'phone.required' => 'Введите номер телефона.',
+            'iin.required' => 'Введите ИИН.',
+            'iin.digits' => 'ИИН должен содержать 12 цифр.',
         ]);
 
-        $phone = preg_replace('/[^0-9+]/', '', $request->phone);
+        $iin = $request->iin;
 
-        $user = User::where('phone', $phone)->first();
+        $user = User::where('iin', $iin)->where('del', false)->first();
 
         if ($user) {
             return response()->json(['status' => $user->password ? 'password' : 'login']);
         }
 
-        if (Whitelist::isWhitelisted($phone)) {
+        if (Whitelist::isWhitelisted($iin)) {
             return response()->json(['status' => 'register']);
         }
 
         return response()->json(['status' => 'not_found']);
     }
 
-    public function loginByPhone(Request $request)
+    public function loginByIin(Request $request)
     {
         $request->validate([
-            'phone' => 'required|string',
+            'iin' => 'required|string|digits:12',
             'password' => 'nullable|string',
         ], [
-            'phone.required' => 'Введите номер телефона.',
+            'iin.required' => 'Введите ИИН.',
+            'iin.digits' => 'ИИН должен содержать 12 цифр.',
         ]);
 
-        $phone = preg_replace('/[^0-9+]/', '', $request->phone);
+        $iin = $request->iin;
 
-        $user = User::where('phone', $phone)->first();
+        $user = User::where('iin', $iin)->where('del', false)->first();
 
         if (!$user) {
-            if (!Whitelist::isWhitelisted($phone)) {
-                return back()->with('error', 'Ваш номер не найден в белом списке. Обратитесь к администратору.');
+            if (!Whitelist::isWhitelisted($iin)) {
+                return back()->with('error', 'Ваш ИИН не найден в белом списке. Обратитесь к администратору.');
             }
 
-            session(['registration' => ['phone' => $phone]]);
+            session(['registration' => ['iin' => $iin]]);
             return redirect()->route('register.step', 'password');
         }
 

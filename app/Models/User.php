@@ -13,10 +13,10 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'phone', 'email', 'password', 'telegram_id', 'avatar',
+        'name', 'iin', 'email', 'password', 'telegram_id', 'avatar',
         'role', 'verification_status', 'verification_document',
         'subscription_status', 'subscription_expires_at',
-        'is_blocked', 'city', 'specialization',
+        'is_blocked', 'del', 'city', 'specialization',
     ];
 
     protected $hidden = [
@@ -30,6 +30,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'subscription_expires_at' => 'datetime',
             'is_blocked' => 'boolean',
+            'del' => 'boolean',
         ];
     }
 

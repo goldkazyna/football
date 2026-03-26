@@ -14,8 +14,10 @@
 
 ## Key Architecture
 - Roles: superadmin, tournament_admin, captain, player
-- Registration is 5-step flow, stored in session
+- Registration is 6-step flow (iin → password → profile → team → verification → payment), stored in session
+- Auth is IIN-based (12-digit individual identification number), NOT phone-based
 - Whitelist check happens BEFORE any registration
+- Users table has `del` column (0=active, 1=deleted) for soft deletion
 - Subscription check via middleware CheckSubscription
 - Match score is calculated from match_events (not stored directly)
 - Standings are calculated on-the-fly via StandingsService

@@ -96,7 +96,7 @@
                     <div class="ver-avatar">{{ mb_substr($verification->name, 0, 2) }}</div>
                     <div class="ver-info">
                         <div class="ver-name">{{ $verification->name }}</div>
-                        <div class="ver-meta">{{ $verification->phone }}</div>
+                        <div class="ver-meta">{{ $verification->iin }}</div>
                     </div>
                     <div class="ver-date">{{ $verification->created_at->format('d.m') }}</div>
                 </div>
@@ -189,8 +189,8 @@
                             @if($member->user->city ?? null)
                                 <span>{{ $member->user->city }}</span>
                             @endif
-                            @if($member->user->phone ?? null)
-                                <span>{{ $member->user->phone }}</span>
+                            @if($member->user->iin ?? null)
+                                <span>{{ $member->user->iin }}</span>
                             @endif
                         </div>
                     </div>

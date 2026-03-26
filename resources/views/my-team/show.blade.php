@@ -72,7 +72,7 @@
                         </div>
                         @if($member->user)
                             <div style="font-size:0.6875rem;color:var(--text-muted);margin-top:2px;">
-                                {{ $member->user->phone }}
+                                {{ $member->user->iin }}
                                 &middot;
                                 @if($member->user->subscription_status === 'active' && $member->user->subscription_expires_at?->isFuture())
                                     <span style="color:var(--primary);">Оплачен</span>

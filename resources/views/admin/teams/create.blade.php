@@ -44,18 +44,18 @@
                         Сначала добавьте капитана в <a href="{{ route('whitelist.index') }}" style="color:var(--warning);text-decoration:underline;">белый список</a> с ролью «Капитан»
                     </div>
                 @else
-                    <select name="captain_phone" class="form-select" required>
-                        <option value="" disabled {{ old('captain_phone') ? '' : 'selected' }}>Выберите капитана</option>
+                    <select name="captain_iin" class="form-select" required>
+                        <option value="" disabled {{ old('captain_iin') ? '' : 'selected' }}>Выберите капитана</option>
                         @foreach($captainOptions as $opt)
-                            <option value="{{ $opt->phone }}" {{ old('captain_phone') === $opt->phone ? 'selected' : '' }}>
-                                {{ $opt->phone }}
+                            <option value="{{ $opt->iin }}" {{ old('captain_iin') === $opt->iin ? 'selected' : '' }}>
+                                {{ $opt->iin }}
                                 @if($opt->name) — {{ $opt->name }} @endif
                                 @if(!$opt->registered) (не зарегистрирован) @endif
                             </option>
                         @endforeach
                     </select>
                 @endif
-                @error('captain_phone')
+                @error('captain_iin')
                     <div style="color:var(--error);font-size:0.75rem;margin-top:4px;">{{ $message }}</div>
                 @enderror
             </div>

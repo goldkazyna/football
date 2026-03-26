@@ -20,26 +20,27 @@ class WhitelistController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('phone', 'like', '%' . $request->search . '%');
+            $query->where('iin', 'like', '%' . $request->search . '%');
         }
 
         $items = $query->latest('created_at')->paginate(20);
 
-        // Check registration status for each phone
-        $phones = $items->pluck('phone');
-        $registeredPhones = User::whereIn('phone', $phones)->pluck('phone')->toArray();
+        // Check registration status for each iin
+        $iins = $items->pluck('iin');
+        $registeredIins = User::whereIn('iin', $iins)->where('del', false)->pluck('iin')->toArray();
 
-        return view('admin.whitelist.index', compact('items', 'registeredPhones'));
+        return view('admin.whitelist.index', compact('items', 'registeredIins'));
     }
 
     public function store(Request $request)
     {
         $rules = [
-            'phone' => 'required|string|unique:whitelist,phone',
+            'iin' => 'required|string|digits:12|unique:whitelist,iin',
         ];
         $messages = [
-            'phone.required' => 'Введите номер телефона.',
-            'phone.unique' => 'Этот номер уже в белом списке.',
+            'iin.required' => 'Введите ИИН.',
+            'iin.digits' => 'ИИН должен содержать 12 цифр.',
+            'iin.unique' => 'Этот ИИН уже в белом списке.',
         ];
 
         // Только суперадмин может выбирать роль
@@ -49,16 +50,16 @@ class WhitelistController extends Controller
 
         $request->validate($rules, $messages);
 
-        $phone = preg_replace('/[^0-9+]/', '', $request->phone);
+        $iin = $request->iin;
         $role = $request->user()->isSuperAdmin() ? ($request->input('role', 'player')) : 'player';
 
         Whitelist::create([
-            'phone' => $phone,
+            'iin' => $iin,
             'role' => $role,
             'added_by' => $request->user()->id,
         ]);
 
-        return back()->with('success', "Номер {$phone} добавлен в белый список.");
+        return back()->with('success', "ИИН {$iin} добавлен в белый список.");
     }
 
     public function destroy(Request $request, Whitelist $item)
@@ -67,10 +68,10 @@ class WhitelistController extends Controller
 
         // Капитан может удалять только свои номера
         if (!$user->isSuperAdmin() && $item->added_by !== $user->id) {
-            abort(403, 'Вы можете удалять только свои номера.');
+            abort(403, 'Вы можете удалять только свои записи.');
         }
 
         $item->delete();
-        return back()->with('success', 'Номер удалён из белого списка.');
+        return back()->with('success', 'ИИН удалён из белого списка.');
     }
 }

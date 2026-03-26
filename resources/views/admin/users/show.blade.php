@@ -47,7 +47,7 @@
     <div class="profile-card">
         <div class="profile-avatar">{{ mb_substr($user->name, 0, 2) }}</div>
         <div class="profile-name">{{ $user->name }}</div>
-        <div class="profile-detail">{{ $user->phone }}</div>
+        <div class="profile-detail">ИИН: {{ $user->iin }}</div>
         @if($user->email)
             <div class="profile-detail">{{ $user->email }}</div>
         @endif

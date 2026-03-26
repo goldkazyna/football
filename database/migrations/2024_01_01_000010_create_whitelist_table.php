@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('whitelist', function (Blueprint $table) {
             $table->id();
-            $table->string('phone')->unique();
+            $table->string('iin', 12)->unique();
             $table->foreignId('added_by')->constrained('users')->cascadeOnDelete();
             $table->timestamp('created_at')->nullable();
         });

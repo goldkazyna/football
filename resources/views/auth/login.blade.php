@@ -37,22 +37,6 @@
         color: var(--accent-blue);
         font-weight: 500;
     }
-    .phone-masked-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-    .phone-masked-wrapper .phone-prefix-label {
-        position: absolute;
-        left: 16px;
-        font-size: 0.9375rem;
-        color: var(--text-primary);
-        pointer-events: none;
-        font-weight: 500;
-    }
-    .phone-masked-wrapper .form-input {
-        padding-left: 46px;
-    }
 </style>
 @endpush
 
@@ -60,79 +44,50 @@
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('loginForm', () => ({
-        digits: '',
+        iin: '',
         password: '',
-        step: 'phone',
+        step: 'iin',
         loading: false,
         errorMsg: '',
 
         init() {
-            let initial = '{{ old("phone", "") }}'.replace(/[^0-9]/g, '');
-            if (initial.length === 11 && (initial[0] === '7' || initial[0] === '8')) initial = initial.substring(1);
-            this.digits = initial.substring(0, 10);
+            this.iin = '{{ old("iin", "") }}'.replace(/[^0-9]/g, '').substring(0, 12);
 
             @if($errors->has('password'))
                 this.step = 'password';
             @endif
         },
 
-        get display() {
-            let d = this.digits;
-            if (d.length === 0) return '';
-            let out = '(' + d.substring(0, 3);
-            if (d.length >= 3) out += ') ' + d.substring(3, 6);
-            if (d.length >= 6) out += '-' + d.substring(6, 8);
-            if (d.length >= 8) out += '-' + d.substring(8, 10);
-            return out;
-        },
-
-        get phone() {
-            return '+7' + this.digits;
-        },
-
-        get phoneComplete() {
-            return this.digits.length === 10;
+        get iinComplete() {
+            return this.iin.length === 12;
         },
 
         onInput(e) {
             let raw = e.target.value.replace(/[^0-9]/g, '');
-            if (raw.length >= 11 && (raw[0] === '7' || raw[0] === '8')) raw = raw.substring(1);
-            this.digits = raw.substring(0, 10);
-            if (this.step !== 'phone') {
-                this.step = 'phone';
+            this.iin = raw.substring(0, 12);
+            if (this.step !== 'iin') {
+                this.step = 'iin';
                 this.password = '';
                 this.errorMsg = '';
             }
-            this.$nextTick(() => { e.target.value = this.display; });
+            this.$nextTick(() => { e.target.value = this.iin; });
         },
 
-        onBackspace(e) {
-            if (this.digits.length > 0) {
-                this.digits = this.digits.slice(0, -1);
-                if (this.step !== 'phone') {
-                    this.step = 'phone';
-                    this.password = '';
-                    this.errorMsg = '';
-                }
-                e.target.value = this.display;
-            }
-        },
-
-        async checkPhone() {
-            if (!this.phoneComplete) return;
+        async checkIin() {
+            if (!this.iinComplete) return;
 
             this.loading = true;
             this.errorMsg = '';
 
             try {
-                const res = await fetch('{{ route("login.checkPhone") }}', {
+                const res = await fetch('{{ route("login.checkIin") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ phone: this.phone })
+                    body: JSON.stringify({ iin: this.iin })
                 });
 
                 const data = await res.json();
@@ -143,7 +98,7 @@ document.addEventListener('alpine:init', () => {
                 } else if (data.status === 'register' || data.status === 'login') {
                     this.$refs.form.submit();
                 } else {
-                    this.errorMsg = 'Ваш номер не найден. Обратитесь к администратору.';
+                    this.errorMsg = 'Ваш ИИН не найден. Обратитесь к администратору.';
                 }
             } catch (e) {
                 this.errorMsg = 'Ошибка соединения. Попробуйте ещё раз.';
@@ -153,9 +108,9 @@ document.addEventListener('alpine:init', () => {
         },
 
         submitForm(e) {
-            if (this.step === 'phone') {
+            if (this.step === 'iin') {
                 e.preventDefault();
-                this.checkPhone();
+                this.checkIin();
             }
         }
     }));
@@ -169,27 +124,24 @@ document.addEventListener('alpine:init', () => {
         <p>Вход и регистрация на турнир</p>
     </div>
 
-    <form x-data="loginForm" x-ref="form" action="{{ route('login.phone') }}" method="POST" @submit="submitForm($event)" class="animate-in animate-in-delay-3">
+    <form x-data="loginForm" x-ref="form" action="{{ route('login.iin') }}" method="POST" @submit="submitForm($event)" class="animate-in animate-in-delay-3">
         @csrf
-        <input type="hidden" name="phone" :value="phone">
+        <input type="hidden" name="iin" :value="iin">
 
         <div class="form-group">
-            <label class="form-label">Номер телефона</label>
-            <div class="phone-masked-wrapper">
-                <span class="phone-prefix-label">+7</span>
-                <input
-                    type="tel"
-                    class="form-input"
-                    placeholder="(700) 123-45-67"
-                    inputmode="numeric"
-                    autocomplete="tel"
-                    :value="display"
-                    @input="onInput($event)"
-                    @keydown.backspace.prevent="onBackspace($event)"
-                    required
-                >
-            </div>
-            @error('phone')
+            <label class="form-label">ИИН</label>
+            <input
+                type="text"
+                class="form-input"
+                placeholder="Введите 12-значный ИИН"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="12"
+                :value="iin"
+                @input="onInput($event)"
+                required
+            >
+            @error('iin')
                 <div style="color:var(--error);font-size:0.75rem;margin-top:4px;">{{ $message }}</div>
             @enderror
             <div x-show="errorMsg" x-text="errorMsg" x-cloak style="color:var(--error);font-size:0.75rem;margin-top:4px;"></div>
@@ -211,15 +163,12 @@ document.addEventListener('alpine:init', () => {
         </div>
 
         <div class="login-actions">
-            <button type="submit" class="btn btn-primary" :disabled="loading || !phoneComplete">
+            <button type="submit" class="btn btn-primary" :disabled="loading || !iinComplete">
                 <template x-if="loading">
                     <span>Проверяем...</span>
                 </template>
-                <template x-if="!loading && step === 'phone'">
-                    <span style="display:inline-flex;align-items:center;gap:8px;">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                        Продолжить
-                    </span>
+                <template x-if="!loading && step === 'iin'">
+                    <span>Продолжить</span>
                 </template>
                 <template x-if="!loading && step === 'password'">
                     <span>Войти</span>

@@ -27,8 +27,8 @@ Route::view('/legal/oplata-i-vozvrat', 'legal.oplata-i-vozvrat')->name('legal.op
 // --- Auth (guest) ---
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login/check-phone', [LoginController::class, 'checkPhone'])->name('login.checkPhone');
-    Route::post('/login/phone', [LoginController::class, 'loginByPhone'])->name('login.phone');
+    Route::post('/login/check-iin', [LoginController::class, 'checkIin'])->name('login.checkIin');
+    Route::post('/login/iin', [LoginController::class, 'loginByIin'])->name('login.iin');
 
     Route::get('/register/{step}', [RegisterController::class, 'showStep'])->name('register.step');
     Route::post('/register/{step}', [RegisterController::class, 'processStep'])->name('register.process');

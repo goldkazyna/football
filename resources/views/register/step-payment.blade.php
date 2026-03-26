@@ -187,8 +187,8 @@
 
     <div class="payment-details animate-in animate-in-delay-2">
         <div class="payment-detail">
-            <span class="payment-detail-label">Телефон</span>
-            <span class="payment-detail-value">+7 {{ $data['phone'] ?? '' }}</span>
+            <span class="payment-detail-label">ИИН</span>
+            <span class="payment-detail-value">{{ $data['iin'] ?? '' }}</span>
         </div>
         <div class="payment-detail">
             <span class="payment-detail-label">Имя</span>
