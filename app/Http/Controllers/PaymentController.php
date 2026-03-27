@@ -13,17 +13,29 @@ class PaymentController extends Controller
     public function create(Request $request)
     {
         $user = $request->user();
-        $amount = config('services.plexy.membership_fee') / 100; // тиыны → тенге
+        $plans = config('services.plexy.plans');
 
-        return view('payment.create', compact('user', 'amount'));
+        return view('payment.create', compact('user', 'plans'));
     }
 
     public function initiate(Request $request, PlexyService $plexy)
     {
+        $request->validate([
+            'plan' => 'required|in:monthly,yearly',
+        ], [
+            'plan.required' => 'Выберите тариф.',
+            'plan.in' => 'Недопустимый тариф.',
+        ]);
+
         $user = $request->user();
-        $amountTiyn = config('services.plexy.membership_fee');
+        $plan = $request->plan;
+        $planConfig = config("services.plexy.plans.{$plan}");
+        $amountTiyn = $planConfig['amount'];
         $amountTenge = $amountTiyn / 100;
+        $months = $planConfig['months'];
         $orderReference = 'FD-' . $user->id . '-' . Str::random(12);
+
+        $planLabel = $plan === 'yearly' ? '12 месяцев' : '1 месяц';
 
         // Создаём запись платежа
         $payment = Payment::create([
@@ -31,6 +43,7 @@ class PaymentController extends Controller
             'amount' => $amountTenge,
             'currency' => 'KZT',
             'status' => 'pending',
+            'plan' => $plan,
             'payment_method' => 'card',
             'order_reference' => $orderReference,
         ]);
@@ -39,7 +52,7 @@ class PaymentController extends Controller
         $result = $plexy->createPaymentLink([
             'amount' => $amountTiyn,
             'currency' => 'KZT',
-            'description' => 'Подписка Football Doctors — ' . $user->name,
+            'description' => "Подписка Football Doctors ({$planLabel}) — " . $user->name,
             'orderReference' => $orderReference,
             'expiresAt' => now()->addHours(24)->toIso8601ZuluString(),
             'validation' => false,
@@ -108,32 +121,35 @@ class PaymentController extends Controller
     protected function handlePaymentSuccess(Payment $payment, array $data): void
     {
         if ($payment->status === 'confirmed') {
-            return; // Уже обработан
+            return;
         }
+
+        $months = $payment->plan === 'yearly' ? 12 : 1;
 
         $payment->update([
             'status' => 'confirmed',
             'transaction_id' => $data['id'] ?? null,
             'valid_from' => now(),
-            'valid_until' => now()->addMonth(),
+            'valid_until' => now()->addMonths($months),
         ]);
 
-        // Активируем подписку юзера на 1 месяц
         $payment->user->update([
             'subscription_status' => 'active',
-            'subscription_expires_at' => now()->addMonth(),
+            'subscription_expires_at' => now()->addMonths($months),
         ]);
 
         Log::info('Payment confirmed via Plexy', [
             'payment_id' => $payment->id,
             'user_id' => $payment->user_id,
+            'plan' => $payment->plan,
+            'months' => $months,
         ]);
     }
 
     protected function handlePaymentFailed(Payment $payment, array $data): void
     {
         if ($payment->status === 'confirmed') {
-            return; // Не откатываем подтверждённый
+            return;
         }
 
         $payment->update([

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('currency', 3)->default('KZT');
             $table->enum('status', ['pending', 'confirmed', 'failed'])->default('pending');
+            $table->enum('plan', ['monthly', 'yearly'])->default('monthly');
             $table->string('payment_method')->nullable();
             $table->string('transaction_id')->nullable();
             $table->foreignId('confirmed_by')->nullable()->constrained('users')->nullOnDelete();

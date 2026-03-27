@@ -39,7 +39,10 @@ return [
         'api_key' => env('PLEXY_API_KEY'),
         'webhook_secret' => env('PLEXY_WEBHOOK_SECRET'),
         'base_url' => 'https://api.plexypay.com/v1',
-        'membership_fee' => 5000, // 50 KZT в тиынах (3500 KZT = 350000 для прода)
+        'plans' => [
+            'monthly' => ['amount' => 400000, 'months' => 1, 'label' => '1 месяц'],   // 4000 KZT
+            'yearly'  => ['amount' => 4200000, 'months' => 12, 'label' => '12 месяцев'], // 42000 KZT
+        ],
     ],
 
 ];

@@ -30,16 +30,18 @@ class PaymentController extends Controller
 
     public function confirm(Request $request, Payment $payment)
     {
+        $months = $payment->plan === 'yearly' ? 12 : 1;
+
         $payment->update([
             'status' => 'confirmed',
             'confirmed_by' => $request->user()->id,
             'valid_from' => now(),
-            'valid_until' => now()->addMonth(),
+            'valid_until' => now()->addMonths($months),
         ]);
 
         $payment->user->update([
             'subscription_status' => 'active',
-            'subscription_expires_at' => now()->addMonth(),
+            'subscription_expires_at' => now()->addMonths($months),
         ]);
 
         return back()->with('success', "Оплата для {$payment->user->name} подтверждена.");

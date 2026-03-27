@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Payment extends Model
 {
     protected $fillable = [
-        'user_id', 'amount', 'currency', 'status',
+        'user_id', 'amount', 'currency', 'status', 'plan',
         'payment_method', 'transaction_id', 'confirmed_by',
         'valid_from', 'valid_until',
         'plexy_link_id', 'plexy_checkout_url', 'order_reference',
